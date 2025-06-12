@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -31,6 +32,7 @@ import ApiRest.ApiRest.service.ProductService;
 
 @RestController
 @RequestMapping("/objects")
+@CrossOrigin(origins = "http://localhost:3000")
 public class ProductsController{
 
     @Autowired
@@ -58,7 +60,7 @@ public class ProductsController{
     }
 
 
-    // // No actualiza
+    
     @PutMapping("/{idProduct}")
     public ResponseEntity<?> updateObject(@PathVariable String idProduct, @RequestBody ModelProduct product){
         return productService.updateObject(idProduct, product);
@@ -69,7 +71,7 @@ public class ProductsController{
         return productService.partiallyUpdateObject(idProduct, product);
     }
 
-    // // falta agregar el idProduct
+    
     @DeleteMapping("/{idProduct}")
     public ResponseEntity<?> deteleObject(@PathVariable String idProduct){
         return productService.deteleObject(idProduct);
