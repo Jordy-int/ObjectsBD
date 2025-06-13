@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -26,6 +27,21 @@ export default function App() {
     }
   }
 
+  async function fetchDelete(id) {
+
+    try {
+      const response = await fetch(`http://localhost:8080/objects/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+
+    } catch (error) {
+      console.log("error al Borrar " + error)
+    }
+  }
+
   // Ejecuta al momento de cargar el Componente
   useEffect(() => {
     fetchObjects();
@@ -33,6 +49,9 @@ export default function App() {
 
   return (
     <>
+      <Link to={'/crear'}>
+        <button>Crear Producto nuevo</button>
+      </Link>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
@@ -67,8 +86,14 @@ export default function App() {
                 </TableCell>
 
                 <TableCell><button value={object.id} >Editar  </button></TableCell>
-                <TableCell><button value={object.id} >Actualizar</button></TableCell>
-                <TableCell><button value={object.id} >Eliminar</button></TableCell>
+
+                <TableCell>
+                  <Link to={`/${object.id}`} >
+                    <button value={object.id} >Actualizar</button>
+                  </Link>
+                </TableCell>
+
+                <TableCell><button value={object.id} onClick={() => fetchDelete(object.id)} >Eliminar</button></TableCell>
 
               </TableRow>
             ))}

@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { ListItemAvatar } from '@mui/material';
 
-export default function Put() {
+export default function Post() {
 
   const [object, setObject] = useState({});
   const [objectData, setObjectData] = useState({});
@@ -43,16 +43,7 @@ export default function Put() {
     console.log(objectData)
     console.log(object)
   }
-
-
-
-  function verInfo() {
-    // console.log(dataJson)
-    // console.log(lastKey)
-    // console.log(map)
-    // console.log(test)
-    // console.log("mostrando desde la función")
-  }
+  
 
   function deleteInput() {
     const keys = Object.keys(objectData);
@@ -91,15 +82,15 @@ export default function Put() {
       data: createJson(formJson)
     }
 
-    fetchPost(json)
+    fetchPut(json)
 
   }
 
-  async function fetchPost(json) {
+  async function fetchPut(json) {
 
     try {
-      const response = await fetch(`http://localhost:8080/objects/${id}`, {
-        method: 'PUT',
+      const response = await fetch(`http://localhost:8080/objects`, {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
@@ -108,7 +99,7 @@ export default function Put() {
       })
 
     } catch (error) {
-      console.log("error al actualizar " + error)
+      console.log("error al enviar " + error)
     }
   }
 
@@ -146,12 +137,12 @@ export default function Put() {
   return (
     <>
 
-      <form method='put' onSubmit={handleSubmit}>
+      <form method='post' onSubmit={handleSubmit}>
 
 
         <div className="mb-3">
           <label htmlFor="formGroupExampleInput" className="form-label">Nombre</label>
-          <input type="text" defaultValue={''} name='name' className="form-control" id="formGroupExampleInput" placeholder={object.name} />
+          <input type="text" defaultValue={''} name='name' className="form-control" id="formGroupExampleInput" />
         </div>
         <div className="mb-3">
           <label className="form-label">Data</label>
@@ -167,7 +158,6 @@ export default function Put() {
         <button type='reset' >Reiniciar</button>
 
         <button type='button' onClick={addField} >Agregar Campo</button>
-        <button type='button' onClick={verInfo} >Ver info</button>
         <button type='button' onClick={deleteInput} >Borrar Campo</button>
       </form>
     </>
