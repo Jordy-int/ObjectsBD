@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { ListItemAvatar } from '@mui/material';
@@ -14,25 +14,7 @@ export default function Post() {
 
   const [count, setCount] = useState(0);
 
-  const fetchObjects = async () => {
-    try {
-      const response = await fetch(`http://localhost:8080/objects/${id}`, {
-        method: 'GET'
-      })
-      const data = await response.json();
-
-      console.log(data)
-
-      setObject(data);
-      if (data.data === null) {
-        setObjectData(" " , " ")
-      }else{
-        setObjectData(data.data);
-      }
-    } catch (error) {
-      console.log("Error fetch objetos")
-    }
-  }
+  const navigate = useNavigate();
 
   function addField() {
     const newCount = count + 1;
@@ -82,6 +64,10 @@ export default function Post() {
       data: createJson(formJson)
     }
 
+    if (formJson.name == '') {
+      return alert('El nombre no puede estar vacío')
+    }
+
     fetchPut(json)
 
   }
@@ -97,6 +83,9 @@ export default function Post() {
         body: JSON.stringify( json )
 
       })
+
+      alert('Agregado con exito')
+      navigate('/')
 
     } catch (error) {
       console.log("error al enviar " + error)
@@ -130,8 +119,6 @@ export default function Post() {
 
   // Ejecuta al momento de cargar el Componente
   useEffect(() => {
-    fetchObjects();
-
   }, [id]);
 
   return (
@@ -154,11 +141,12 @@ export default function Post() {
           </div>
         )
         }
-        <button type='submit' >Revisar info del formulario</button>
+        <button type='submit' >Enviar</button>
         <button type='reset' >Reiniciar</button>
 
         <button type='button' onClick={addField} >Agregar Campo</button>
         <button type='button' onClick={deleteInput} >Borrar Campo</button>
+        <button type='button' onClick={() => navigate('/')} >Volver</button>
       </form>
     </>
   );

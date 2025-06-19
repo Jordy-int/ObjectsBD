@@ -37,7 +37,11 @@ export default function App() {
         }
       })
 
+      alert(`Objeto con id ${id} eliminado `)
+      window.location.reload();
+
     } catch (error) {
+      alert('Error al Eliminar')
       console.log("error al Borrar " + error)
     }
   }
@@ -84,8 +88,6 @@ export default function App() {
                     'Sin datos'
                   )}
                 </TableCell>
-
-                <TableCell><button value={object.id} >Editar  </button></TableCell>
 
                 <TableCell>
                   <Link to={`/${object.id}`} >

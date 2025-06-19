@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { ListItemAvatar } from '@mui/material';
@@ -13,6 +13,8 @@ export default function Put() {
   const { id } = useParams();
 
   const [count, setCount] = useState(0);
+
+  const navigate = useNavigate();
 
   const fetchObjects = async () => {
     try {
@@ -30,6 +32,7 @@ export default function Put() {
         setObjectData(data.data);
       }
     } catch (error) {
+      alert('Error al traer objetos')
       console.log("Error fetch objetos")
     }
   }
@@ -38,20 +41,10 @@ export default function Put() {
     const newCount = count + 1;
 
     setCount(newCount)
-    setObjectData({ ...objectData, [`Campo${newCount}`]: `Campo${newCount}` })
+    setObjectData({ ...objectData, [`N${newCount}`]: `N${newCount}` })
 
     console.log(objectData)
     console.log(object)
-  }
-
-
-
-  function verInfo() {
-    // console.log(dataJson)
-    // console.log(lastKey)
-    // console.log(map)
-    // console.log(test)
-    // console.log("mostrando desde la función")
   }
 
   function deleteInput() {
@@ -91,6 +84,11 @@ export default function Put() {
       data: createJson(formJson)
     }
 
+    if (formJson.name == '') {
+      alert('El nombre no puede estar vacío')
+      return window.location.reload();
+    }
+
     fetchPost(json)
 
   }
@@ -106,8 +104,14 @@ export default function Put() {
         body: JSON.stringify( json )
 
       })
+      
+      alert("Actualización Exitosa");
+
+      navigate('/')
+      
 
     } catch (error) {
+      alert('Error al Actualizar')
       console.log("error al actualizar " + error)
     }
   }
@@ -151,24 +155,24 @@ export default function Put() {
 
         <div className="mb-3">
           <label htmlFor="formGroupExampleInput" className="form-label">Nombre</label>
-          <input type="text" defaultValue={''} name='name' className="form-control" id="formGroupExampleInput" placeholder={object.name} />
+          <input type="text" defaultValue={object.name} name='name' className="form-control" id="formGroupExampleInput" placeholder={object.name} />
         </div>
         <div className="mb-3">
           <label className="form-label">Data</label>
         </div>
         {Object.entries(objectData).map(([key, value]) =>
           <div key={key}>
-            <input defaultValue={''} type='text' name={"key " + key} placeholder={key} />
-            <input defaultValue={''} type='text' name={"value " + value} placeholder={value} />
+            <input defaultValue={key} type='text' name={"key " + key} placeholder={key} />
+            <input defaultValue={value} type='text' name={"value " + value} placeholder={value} />
           </div>
         )
         }
-        <button type='submit' >Revisar info del formulario</button>
+        <button type='submit' >Enviar</button>
         <button type='reset' >Reiniciar</button>
 
         <button type='button' onClick={addField} >Agregar Campo</button>
-        <button type='button' onClick={verInfo} >Ver info</button>
         <button type='button' onClick={deleteInput} >Borrar Campo</button>
+        <button type='button' onClick={() => navigate('/')} >Volver</button>
       </form>
     </>
   );
